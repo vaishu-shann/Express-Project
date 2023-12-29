@@ -4,6 +4,12 @@ const mongoose = require("mongoose");
 
 const contactSchema = mongoose.Schema(
   {
+    //This ID is actually created in mongodb [ObjectID]
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
     name: {
       type: String,
       require: [true, "Please add the contact name"],

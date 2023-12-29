@@ -1,12 +1,13 @@
-//@desc  Register user
-//@route POST /api/users/register
+//desc  Register user
+//route POST /api/users/register
+// we are not using try catch becoz if any error occured asynchandler will pass to error handler 
 
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-//@access public
+//access public
 const registerUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
@@ -19,7 +20,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already registered!");
   }
   // hash password
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10); // here 10 is the solved rounds that we want for the hashing of the password
   console.log("Hashed password", hashedPassword);
   const user = await User.create({
     username,
@@ -35,9 +36,9 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-//@desc  Login user
-//@route POST /api/users/login
-//@access public
+//desc  Login user
+//route POST /api/users/login
+//access public
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -56,7 +57,7 @@ const loginUser = asyncHandler(async (req, res) => {
         },
       },
       process.env.ACCESS_TOKEN_SECERT,
-      { expiresIn: "1m" }
+      { expiresIn: "15m" }
     );
     res.status(200).json({ accessToken });
   } else {
@@ -65,9 +66,9 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-//@desc  current user
-//@route POST /api/users/current
-//@access private
+//desc  current user
+//route GET /api/users/current
+//access private
 const currentUser = asyncHandler(async (req, res) => {
   res.json(req.user);
 });
